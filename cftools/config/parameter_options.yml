@@ -1,0 +1,36 @@
+chm_v1:
+  - 'no2'
+  - 'o3'
+  - 'pm25'
+  - 'hcho'
+  - 'so2'
+  - 'co'
+chm_p23:
+  - 'no2'
+  - 'o3'
+  - 'pm25'
+  - 'hcho'
+  - 'so2'
+  - 'co'
+chm_v72:
+  - 'no2'
+  - 'o3'
+  - 'pm25'
+  - 'hcho'
+  - 'so2'
+  - 'co'
+met_x1:
+  - 'CLDTT'
+  - 'PHIS'
+  - 'T2M'
+  - 'TPREC'
+  - 'U10M'
+  - 'V10M'
+  - 'ZPBL'
+met_p23:
+  - 'H'
+met_v72:
+  - 'T'
+  - 'U'
+  - 'V'
+  - 'ZL'

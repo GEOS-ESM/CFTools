@@ -1,5 +1,6 @@
-from cftools.client import get_api_response
+from cftools.client.utils import (
+    url_builder
+)
 
-def test_get_fcast():
-    api_call = get_api_response('https://fluid.nccs.nasa.gov/cfapi/')
-    assert list(api_call.keys()) == ['Forecast and Replay Model Fields', 'Historical AQC Data Sets']
+def test_cftools_url_builder():
+    assert url_builder('https://fluid.nccs.nasa.gov/cfapi/', ['test','test','123']) == 'https://fluid.nccs.nasa.gov/cfapi/test/test/123'

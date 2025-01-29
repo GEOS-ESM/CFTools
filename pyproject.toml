@@ -28,6 +28,7 @@ dependencies = [
   "pydantic>=2.0",
   "numpy",
   "pandas",
+  "PyYAML"
 ]
 
 [project.urls]
@@ -65,10 +66,12 @@ exclude_lines = [
 ]
 
 [tool.hatch.envs.default]
+python = "/Users/cwayman/miniforge3/envs/cftools/bin/python"
 dependencies = [
   "pydantic>=2.0",
   "numpy",
   "pandas",
+  "PyYAML"
 ]
 
 [tool.hatch.envs.test]
