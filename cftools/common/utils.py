@@ -11,12 +11,14 @@ def to_dataframe(response):
         cf_dict = {}
         cf_data = to_dict(response)
         cf_dict['time'] = cf_data['time']
-        product = cf_data['schema']['product']
-        MIN_PARAMS=1
-        if len(product) > MIN_PARAMS:
-            #for p in product:
-            cf_dict.update(cf_data['values'])
-            #cf_dict.update({'product': [p]*len(cf_data['time'])})
+        product_idx = 0
+        product = cf_data['schema']['product'][product_idx]
+        level = cf_data['schema']['lev']
+        LEVEL_SWITCH = '23'
+        
+        if level == LEVEL_SWITCH:
+            cf_dict.update({'product': [product]*len(cf_data['time'])})
+            cf_dict.update(cf_data['values'][product])
         else:
             cf_dict.update(cf_data['values'])
 

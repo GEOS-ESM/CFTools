@@ -3,5 +3,6 @@
 # SPDX-License-Identifier: MIT
 
 from cftools.core.api_call import (
-    ApiCall
+    CfFcst,
+    CfRpl
 )
