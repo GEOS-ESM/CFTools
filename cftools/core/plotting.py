@@ -68,9 +68,6 @@ def plume_rose(chm_data, met_data, product: str, lat: int | str, lon: int | str,
               pass
         return fig
 
-def summary_plot(period, product, data):
-        values = data['values'][product]
-
 def vertical_profile(product, data):
         cftools_path = get_cftools_path()
         with open((cftools_path + '/config/config_plots.yml'), 'r') as ymlfile:
