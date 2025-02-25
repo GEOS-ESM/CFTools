@@ -90,8 +90,6 @@ def vertical_profile(product, data):
                 for j, k in enumerate(plevs):
                         Z[j, i] = p23_dict[k][i]
 
-        # Make some figures
-
         # Plotting specifications
         color_map = eval(config_plot['colors'][product])
         if isinstance(color_map, dict):

@@ -13,10 +13,10 @@ def to_dataframe(response):
         cf_dict['time'] = cf_data['time']
         product_idx = 0
         product = cf_data['schema']['product'][product_idx]
-        level = cf_data['schema']['lev']
-        LEVEL_SWITCH = '23'
+        vL = cf_data['schema']['lev']
+        VL_SWITCH = '23'
         
-        if level == LEVEL_SWITCH:
+        if vL == VL_SWITCH:
             cf_dict.update({'product': [product]*len(cf_data['time'])})
             cf_dict.update(cf_data['values'][product])
         else:

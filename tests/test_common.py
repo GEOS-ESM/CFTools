@@ -1,4 +1,4 @@
-from cftools.common.configuration import (
+from src.cftools.common.configuration import (
     collection_prod_list
 )
 
