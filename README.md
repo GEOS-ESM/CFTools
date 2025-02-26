@@ -1,6 +1,6 @@
 # CFTools
 
-[![PyPI - Version](https://img.shields.io/pypi/v/cftools.svg)](https://pypi.org/project/cftools)
+T|Python Version|3.12|
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cftools.svg)](https://pypi.org/project/cftools)
 
 -----
