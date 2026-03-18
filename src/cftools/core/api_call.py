@@ -59,7 +59,7 @@ class ApiCall():
         """
         Get the root URL of the CFAPI.
         """
-        root_url = 'https://fluid.nccs.nasa.gov/cfapi'
+        root_url = 'https://fluid.nccs.nasa.gov/cf/api'
 
         return root_url
 

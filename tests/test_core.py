@@ -9,7 +9,7 @@ def test_cfapi_root():
     Test the ApiCall class to make sure it returns the correct root url.
     """
     api_call = ApiCall(service='cfapi')
-    assert api_call.cfapi_root() == 'https://fluid.nccs.nasa.gov/cfapi'
+    assert api_call.cfapi_root() == 'https://fluid.nccs.nasa.gov/cf/api'
 
 def test_get_fcst_dict():
     """
