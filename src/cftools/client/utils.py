@@ -1,19 +1,15 @@
-from urllib.parse import urljoin
+from urllib.parse import urlencode
 
-def url_builder(base_url: str, params: list=['']):
+def url_builder(base_url: str, params: dict) -> str:
     """
-    Use the list of parameters to build a CF API URL to be queried.
+    Build a query-string based CF API URL.
 
     Args:
-        base_url (str): service base url, selected in cftools.core.api_call
-        params (list): list of parameters provided by user
+        base_url (str): Full endpoint URL (e.g. '.../fcast/' or '.../assim/')
+        params (dict): Query parameters to append as a query string.
 
     Returns:
-        base_url (str): Updated base_url with selected parameters
+        str: The full URL with query string appended.
     """
-    # Iterate over params to build URL
-    for p in params:
-        base_url += '/'
-        base_url = urljoin(base_url, p)
-
-    return base_url
+    query_string = urlencode(params)
+    return f"{base_url.rstrip('/')}/?{query_string}"

@@ -1,4 +1,5 @@
 import pandas as pd
+from typing import Union
 
 from cftools.client.utils import (
     url_builder
@@ -59,7 +60,7 @@ class ApiCall():
         """
         Get the root URL of the CFAPI.
         """
-        root_url = 'https://fluid.nccs.nasa.gov/cf/api'
+        root_url = 'https://fluid-dev.nccs.nasa.gov/cf/api'
 
         return root_url
 
@@ -84,7 +85,7 @@ class ApiCall():
         Send a request to the API and process the response.
 
         Args:
-            params (list): The query parameters for the request. Provided in init.
+            params (dict): The query parameters for the request.
             return_as (str, optional): The format to return the data in. Defaults to 'dict'. 
                                     Options include 'dict' and 'dataframe'.
 
@@ -99,20 +100,6 @@ class ApiCall():
             out_data = to_dataframe(api_response)
 
         return out_data
-    
-    def vertical_profile(self):
-        """
-        Call the vertical profile function from core.plotting
-
-        Returns:
-            fig (matplotlib.figure.Figure): The figure produced based on provided parameters.
-        """
-        data = self.get_data()
-
-        # Call the verical profile function
-        fig = vertical_profile(self.product, data)
-
-        return fig
 
 
 class CfFcst(ApiCall):
@@ -120,10 +107,10 @@ class CfFcst(ApiCall):
 
     Methods
     -------
-    __init__(self, collection: str, product: str, lat: int | str, lon: int | str):
+    __init__(self, collection: str, product: str, lat: Union[int, str], lon: Union[int, str]):
         Constructor
     """
-    def __init__(self, collection: str, product: str, lat: int | str, lon: int | str):
+    def __init__(self, collection: str, product: str, lat: Union[int, str], lon: Union[int, str]):
         """
         Initialize the instance with a series of parameters required to query the
         CFAPI.
@@ -154,25 +141,28 @@ class CfFcst(ApiCall):
             self.product = 'met'
         self.product = self.product.upper()
 
-        # Assemble the params list
-        self.params = ['fcast',
-                  self.grp,
-                  self.vL,
-                  self.product,
-                  (self.lat + 'x' + self.lon)
-                  ]
+        # Point base_url at the forecast endpoint and assemble query params
+        self.base_url = self.cfapi_root() + '/fcast'
+        self.params = {
+            'start_date': 'latest',
+            'dataset': self.grp,
+            'level': self.vL,
+            'products': self.product,
+            'lat': self.lat,
+            'lon': self.lon,
+        }
 
 class CfRpl(ApiCall):
     """Child class of ApiCall for querying the API for replay data
 
     Methods
     -------
-    __init__(self, collection: str, product: str, lat: int | str, lon: int | str):
+    __init__(self, collection: str, product: str, lat: Union[int, str], lon: Union[int, str]):
         Constructor
     plume_rose(self, grid_res=0.1, show_bounds=True):
         Create a plume rose figure from core.plotting
     """
-    def __init__(self, collection: str, product: str, lat: int | str, lon: int | str, start_date: str, end_date: str):
+    def __init__(self, collection: str, product: str, lat: Union[int, str], lon: Union[int, str], start_date: str, end_date: str):
         """
         Initialize the instance with a series of parameters required to query the
         CFAPI.
@@ -207,15 +197,17 @@ class CfRpl(ApiCall):
             self.product = 'met'
         self.product = self.product.upper()
 
-        # Assemble the params list
-        self.params = ['assim',
-                  self.grp,
-                  self.vL,
-                  self.product,
-                  (self.lat + 'x' + self.lon),
-                  self.start_date,
-                  self.end_date
-                  ]
+        # Point base_url at the replay endpoint and assemble query params
+        self.base_url = self.cfapi_root() + '/assim'
+        self.params = {
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'dataset': self.grp,
+            'level': self.vL,
+            'products': self.product,
+            'lat': self.lat,
+            'lon': self.lon,
+        }
 
     def plume_rose(self, grid_res=0.1, show_bounds=True):
         """
@@ -229,16 +221,37 @@ class CfRpl(ApiCall):
             fig (matplotlib.figure.Figure): The figure produced based on provided parameters.
         """
         chm_data = self.get_data()
-        self.params[1] = 'met'
-        self.params[2] = 'x1'
-        self.params[3] = 'MET'
-        met_data = self.get_data()
+
+        # Build met params separately
+        met_params = {
+            'start_date': self.start_date,
+            'end_date': self.end_date,
+            'dataset': 'met',
+            'level': 'x1',
+            'products': 'MET',
+            'lat': self.lat,
+            'lon': self.lon,
+        }
+        met_data = self.get_response(met_params, return_as='dict')
 
         # Call the plume rose function
         fig = plume_rose(chm_data, met_data, self.product,
                    self.lat, self.lon,
                    self.start_date, self.end_date,
                    grid_res=grid_res, show_bounds=show_bounds)
+
+        return fig
+
+    def vertical_profile(self):
+        """
+        Call the vertical profile function from core.plotting
+
+        Returns:
+            fig (matplotlib.figure.Figure): The figure produced based on provided parameters.
+        """
+        data = self.get_data()
+        fig = vertical_profile(self.product, data)
+        return fig
 
         return fig
 
