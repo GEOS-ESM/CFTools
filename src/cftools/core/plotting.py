@@ -1,4 +1,5 @@
 import os
+from typing import Union
 
 import matplotlib.colors as mcolors
 import matplotlib.dates as dates
@@ -13,7 +14,7 @@ import yaml
 
 from cftools.util import get_cftools_path
 
-def plume_rose(chm_data, met_data, product: str, lat: int | str, lon: int | str, start_date: str, end_date: str, grid_res=0.1, show_bounds=True):
+def plume_rose(chm_data, met_data, product: str, lat: Union[int, str], lon: Union[int, str], start_date: str, end_date: str, grid_res=0.1, show_bounds=True):
         """
         Return a plot of wind speed with pollutant concentration as the colormap.
 
@@ -31,8 +32,9 @@ def plume_rose(chm_data, met_data, product: str, lat: int | str, lon: int | str,
         """
 
         # Select and clean values for easier gridding and plotting.
-        u = np.array(met_data['values']['U10M'])
-        v = np.array(met_data['values']['V10M'])
+        # New API returns 'U'/'V'; fall back to legacy 'U10M'/'V10M' if needed.
+        u = np.array(met_data['values'].get('U', met_data['values'].get('U10M')))
+        v = np.array(met_data['values'].get('V', met_data['values'].get('V10M')))
         u = u.reshape((-1,1)).round(2)
         v = v.reshape((-1,1)).round(2)
         Z = np.array(chm_data['values'][product])
